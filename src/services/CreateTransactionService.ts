@@ -17,6 +17,10 @@ class CreateTransactionService {
   public execute({ title, value, type }: Request): Transaction {
     const { total } = this.transactionsRepository.getBalance()
 
+    if(!['income', 'outcome'].includes(type)){
+      throw new Error('Invalid operation')
+    }
+
     if(type === 'outcome' && total < value){
       throw new Error('Insufficient balance to withdraw')
     }
